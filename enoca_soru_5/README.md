@@ -1,0 +1,72 @@
+# E-Ticaret Yönetim Sistemi
+
+Bu proje, bir e-ticaret yönetim sistemi geliştirmek için Spring Boot ile oluşturulmuş bir uygulamadır. Uygulama, müşteri, ürün, sepet ve sipariş işlemlerini yönetmek için RESTful API'ler sunar.
+
+## Özellikler
+
+- **Müşteri Yönetimi**: Müşteri ekleme ve bilgilerini görüntüleme.
+- **Ürün Yönetimi**: Ürün ekleme, güncelleme, silme ve listeleme.
+- **Stok Takibi**: Ürün stoklarını kontrol etme, stoğu biten ürünlerin siparişe kapatılması.
+- **Sepet Yönetimi**: Sepete ürün ekleme, çıkarma, miktar güncelleme, toplam fiyat hesaplama ve sepeti boşaltma.
+- **Sipariş Yönetimi**: Sipariş oluşturma, sipariş bilgilerini görüntüleme, müşteri geçmiş siparişlerini listeleme.
+- **Fiyat Geçmişi Takibi**: Sipariş sırasında alınan ürünlerin fiyatlarını geçmişe yönelik izleme.
+- **Toplam Fiyat Hesaplama**: Sepet veya sipariş işlemlerinde toplam fiyatın otomatik olarak hesaplanması.
+
+## Kullanılan Teknolojiler
+
+- **Java 17**: Ana programlama dili.
+- **Spring Boot 3.x**: Web uygulaması geliştirme çerçevesi.
+- **Hibernate/JPA**: Veritabanı işlemleri için ORM.
+- **MySQL**: Veritabanı yönetim sistemi.
+- **Lombok**: Kod sadeleştirme için araç.
+- **Maven**: Proje bağımlılık yönetimi.
+
+## Veri Tabanı Modeli
+
+1. **BaseEntity**:
+   - Tüm tabloların miras aldığı temel sınıf.
+   - Ortak alanlar: `id`, `createdAt`, `updatedAt`.
+
+2. **Customer**:
+   - Alanlar: `id`, `name`, `email`, `address`.
+   - İlişkiler: Bir müşteri, bir sepet (cart) ve birden fazla sipariş (order) ile ilişkilidir.
+
+3. **Product**:
+   - Alanlar: `id`, `name`, `price`, `stock`.
+   - İlişkiler: Sipariş ve sepet ile ilişkilidir.
+
+4. **Cart**:
+   - Alanlar: `id`, `totalPrice`, `customerId`.
+   - İlişkiler: Bir müşteri ve birden fazla ürün ile ilişkilidir.
+
+5. **Order**:
+   - Alanlar: `id`, `orderCode`, `totalPrice`, `customerId`.
+   - İlişkiler: Bir müşteri ve birden fazla ürün ile ilişkilidir.
+
+6. **OrderHistory**:
+   - Alanlar: `id`, `orderId`, `productId`, `price`, `quantity`.
+   - İlişkiler: Sipariş detaylarını geçmişe yönelik izlemek için kullanılır.
+
+## API Servisleri
+
+### Müşteri Servisleri
+- **AddCustomer**: Yeni müşteri ekler.
+- **GetAllCustomers**: Tüm müşterileri listeler.
+
+### Ürün Servisleri
+- **CreateProduct**: Yeni ürün ekler.
+- **GetProduct**: Belirli bir ürünü getirir.
+- **UpdateProduct**: Mevcut ürünü günceller.
+- **DeleteProduct**: Bir ürünü siler.
+
+### Sepet Servisleri
+- **GetCart**: Müşterinin sepet bilgilerini getirir.
+- **UpdateCart**: Sepeti günceller.
+- **EmptyCart**: Sepeti tamamen temizler.
+- **AddProductToCart**: Sepete ürün ekler.
+- **RemoveProductFromCart**: Sepetten ürün çıkarır.
+
+### Sipariş Servisleri
+- **PlaceOrder**: Mevcut sepeti siparişe dönüştürür.
+- **GetOrderForCode**: Belirli bir sipariş koduna göre sipariş detaylarını getirir.
+- **GetAllOrdersForCustomer**: Bir müşterinin geçmiş siparişlerini listeler.
